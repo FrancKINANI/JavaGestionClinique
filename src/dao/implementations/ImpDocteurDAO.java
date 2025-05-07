@@ -10,8 +10,6 @@ import java.util.List;
 
 import dao.interfaces.DocteurDAO;
 import models.Docteur;
-import models.RendezVous;
-import models.TimeSlot;
 
 class ImpDocteurDao implements DocteurDAO {
     private Connection connection;
@@ -275,54 +273,6 @@ class ImpDocteurDao implements DocteurDAO {
             closeResources();
         }
         return docteurs;
-    }
-
-    @Override
-    public List<TimeSlot> definirDisponibilites(LocalDateTime date, int duree) {
-        sql = "SELECT * FROM " + tableName + " WHERE id NOT IN (SELECT docteur_id FROM rendezvous WHERE date = ?)";
-        return null;
-    }
-
-    @Override
-    public void ajouterCommentaire(RendezVous rdv, String commentaire) {
-        // Implémentez cette méthode pour ajouter un commentaire à un rendez-vous
-    			sql = "UPDATE rendezvous SET commentaire = ? WHERE id = ?";
-    	try {
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, commentaire);
-			preparedStatement.setInt(2, rdv.getId());
-			preparedStatement.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeResources();
-		}
-    }
-
-    @Override
-    public List<RendezVous> getRendezVousByDocteur(int id) {
-        // Implémentez cette méthode pour récupérer les rendez-vous par docteur
-        sql = "SELECT * FROM rendezvous WHERE docteur_id = ?";
-        List<RendezVous> rendezVousList = new ArrayList<>();
-        try {
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, id);
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()) {
-				RendezVous rdv = new RendezVous();
-				rdv.setId(resultSet.getInt("id"));
-				rdv.setDate(resultSet.getObject("date", LocalDateTime.class));
-				rdv.setStatut(resultSet.getString("statut"));
-				rdv.setCommentaire(resultSet.getString("commentaire"));
-				rdv.setDuree(resultSet.getInt("duree"));
-				rendezVousList.add(rdv);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeResources();
-		}
-		return rendezVousList;
     }
 
     private void closeResources() {

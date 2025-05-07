@@ -2,7 +2,7 @@ package models;
 import java.time.LocalDateTime;
 
 public abstract class Personne {
-	private enum ROLE { PATIENT, DOCTEUR, ADMINISTRATEUR };
+	private enum ROLE { PATIENT, DOCTEUR, SCHEDULER, ADMINISTRATEUR };
 	
     private int id;
     private String nom;

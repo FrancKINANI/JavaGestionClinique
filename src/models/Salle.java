@@ -1,5 +1,4 @@
 package models;
-import java.time.LocalDateTime;
 
 public class Salle {
     private int id;
@@ -38,10 +37,5 @@ public class Salle {
 
     public void setCapacite(int capacite) {
         this.capacite = capacite;
-    }
-
-    public boolean estDisponible(LocalDateTime debut, LocalDateTime fin) {
-        // Logique pour vérifier la disponibilité
-        return true;
     }
 }
