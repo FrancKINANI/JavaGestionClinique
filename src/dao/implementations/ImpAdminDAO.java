@@ -8,33 +8,65 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.interfaces.AdminDAO;
-import models.Salle;
+import models.Admin;
 
 public class ImpAdminDAO implements AdminDAO {
 	private Connection connection;
-	private String tableName = "salles";
+	private String tableName = "utilisateurs";
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
 	private Statement statement;
 	private String sql;
 	
-	//Gestion des salles
-	public void addSalle(Salle salle) {
-		sql = "INSERT INTO " + tableName + " (numero, etage, capacite) VALUES (?, ?, ?)";
+	
+	private void closeResources() {
 		try {
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, salle.getNumero());
-			preparedStatement.setInt(2, salle.getEtage());
-			preparedStatement.setInt(3, salle.getCapacite());
-			preparedStatement.executeUpdate();
+			if (preparedStatement != null) preparedStatement.close();
+			if (resultSet != null) resultSet.close();
+			if (statement != null) statement.close();
+			if (connection != null) connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@Override
+	public void addAdmin(Admin admin) {
+		sql = "INSERT INTO " + tableName + " (nom, prenom, adresse, telephone, email, date_naissance, mot_de_passe) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		try {
+			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			preparedStatement.setString(1, admin.getNom());
+			preparedStatement.setString(2, admin.getPrenom());
+			preparedStatement.setString(3, admin.getAdresse());
+			preparedStatement.setString(4, admin.getTelephone());
+			preparedStatement.setString(5, admin.getEmail());
+			preparedStatement.setObject(6, admin.getDateNaissance());
+			preparedStatement.setString(7, admin.getPassword());
+
+			int affectedRows = preparedStatement.executeUpdate();
+			if (affectedRows > 0) {
+				resultSet = preparedStatement.getGeneratedKeys();
+				if (resultSet.next()) {
+					int generatedId = resultSet.getInt(1);
+					// Insert into the role table
+					sql = "INSERT INTO roles (utilisateur_id, role) VALUES (?, ?)";
+					preparedStatement = connection.prepareStatement(sql);
+					preparedStatement.setInt(1, generatedId);
+					preparedStatement.setString(2, "ADMIN");
+					preparedStatement.executeUpdate();
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeResources();
-		}
+		}		
 	}
 
-	public void deleteSalle(int id) {
+
+	@Override
+	public void deleteAdmin(int id) {
 		sql = "DELETE FROM " + tableName + " WHERE id = ?";
 		try {
 			preparedStatement = connection.prepareStatement(sql);
@@ -48,37 +80,76 @@ public class ImpAdminDAO implements AdminDAO {
 		
 	}
 
-	public void updateSalle(Salle salle) {
-		sql = "UPDATE " + tableName + " SET numero = ?, etage = ?, capacite = ? WHERE id = ?";
+
+	@Override
+	public void updateAdmin(Admin admin) {
+		sql = "UPDATE " + tableName + " SET nom = ?, prenom = ?, adresse = ?, telephone = ?, email = ?, date_naissance = ? WHERE id = ?";
 		try {
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, salle.getNumero());
-			preparedStatement.setInt(2, salle.getEtage());
-			preparedStatement.setInt(3, salle.getCapacite());
-			preparedStatement.setInt(4, salle.getId());
+			preparedStatement.setString(1, admin.getNom());
+			preparedStatement.setString(2, admin.getPrenom());
+			preparedStatement.setString(3, admin.getAdresse());
+			preparedStatement.setString(4, admin.getTelephone());
+			preparedStatement.setString(5, admin.getEmail());
+			preparedStatement.setObject(6, admin.getDateNaissance());
+			preparedStatement.setInt(7, admin.getId());
+
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeResources();
 		}
+		
 	}
 
-	public Salle getSalle(int id) {
+
+	@Override
+	public List<Admin> getAllAdmins() {
+		sql = "SELECT * FROM " + tableName + "join roles on utilisateurs.id = roles.utilisateur_id where roles.role = 'ADMIN'";
+		List<Admin> admins = new ArrayList<>();
+		try {
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Admin admin = new Admin();
+				admin.setId(resultSet.getInt("id"));
+				admin.setNom(resultSet.getString("nom"));
+				admin.setPrenom(resultSet.getString("prenom"));
+				admin.setAdresse(resultSet.getString("adresse"));
+				admin.setTelephone(resultSet.getString("telephone"));
+				admin.setEmail(resultSet.getString("email"));
+				admin.setDateNaissance(resultSet.getObject("date_naissance", java.time.LocalDateTime.class));
+				admin.setPassword(resultSet.getString("mot_de_passe"));
+				admins.add(admin);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}		
+		return null;
+	}
+
+
+	@Override
+	public Admin getAdminById(int id) {
 		sql = "SELECT * FROM " + tableName + " WHERE id = ?";
 		try {
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, id);
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				Salle salle = new Salle();
-				salle.setId(resultSet.getInt("id"));
-				salle.setNumero(resultSet.getInt("numero"));
-				salle.setEtage(resultSet.getInt("etage"));
-				salle.setCapacite(resultSet.getInt("capacite"));
-				return salle;
-			} else {
-				return null;
+				Admin admin = new Admin();
+				admin.setId(resultSet.getInt("id"));
+				admin.setNom(resultSet.getString("nom"));
+				admin.setPrenom(resultSet.getString("prenom"));
+				admin.setAdresse(resultSet.getString("adresse"));
+				admin.setTelephone(resultSet.getString("telephone"));
+				admin.setEmail(resultSet.getString("email"));
+				admin.setDateNaissance(resultSet.getObject("date_naissance", java.time.LocalDateTime.class));
+				admin.setPassword(resultSet.getString("mot_de_passe"));
+				return admin;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,45 +157,5 @@ public class ImpAdminDAO implements AdminDAO {
 			closeResources();
 		}
 		return null;
-	}
-
-	public List<Salle> getAllSalles() {
-		sql = "SELECT * FROM " + tableName;
-		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(sql);
-			List<Salle> salles = new ArrayList<>();
-			while (resultSet.next()) {
-				Salle salle = new Salle();
-				salle.setId(resultSet.getInt("id"));
-				salle.setNumero(resultSet.getInt("numero"));
-				salle.setEtage(resultSet.getInt("etage"));
-				salle.setCapacite(resultSet.getInt("capacite"));
-				salles.add(salle);
-			}
-			return salles;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeResources();
-		}
-		return null;
-		
-	}
-
-	public void generateRapport() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private void closeResources() {
-		try {
-			if (preparedStatement != null) preparedStatement.close();
-			if (resultSet != null) resultSet.close();
-			if (statement != null) statement.close();
-			if (connection != null) connection.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

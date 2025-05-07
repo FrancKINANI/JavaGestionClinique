@@ -39,11 +39,10 @@ public class ImpPatientDAO implements PatientDAO {
             	resultSet = preparedStatement.getGeneratedKeys();
 				if (resultSet.next()) {
 					int generatedId = resultSet.getInt(1);
-					sql = "INSERT INTO " + tableName + " (id, numero_secu, sexe, dossier_medical) VALUES (?, ?, ?, ?)";
+					sql = "INSERT INTO " + tableName + " (id, numero_secu, dossier_medical) VALUES (?, ?, ?, ?)";
 					preparedStatement = connection.prepareStatement(sql);
 					preparedStatement.setInt(1, generatedId);
-					preparedStatement.setString(2, patient.getNumeroSecu());
-					preparedStatement.setString(3, patient.getSexe().toString());
+					preparedStatement.setString(2, patient.getNumeroSecu());;
 					preparedStatement.setString(4, patient.getDossierMedical());
 					preparedStatement.executeUpdate();
 					
@@ -77,10 +76,9 @@ public class ImpPatientDAO implements PatientDAO {
 
 			int affectedRows = preparedStatement.executeUpdate();
 			if (affectedRows > 0) {
-				sql = "UPDATE " + tableName + " SET numero_secu = ?, sexe = ?, dossier_medical = ? WHERE id = ?";
+				sql = "UPDATE " + tableName + " SET numero_secu = ?, dossier_medical = ? WHERE id = ?";
 				preparedStatement = connection.prepareStatement(sql);
 				preparedStatement.setString(1, patient.getNumeroSecu());
-				preparedStatement.setString(2, patient.getSexe().toString());
 				preparedStatement.setString(3, patient.getDossierMedical());
 				preparedStatement.setInt(4, patient.getId());
 				preparedStatement.executeUpdate();
@@ -130,7 +128,6 @@ public class ImpPatientDAO implements PatientDAO {
 				resultSet = preparedStatement.executeQuery();
 				if (resultSet.next()) {
 					patient.setNumeroSecu(resultSet.getString("numero_secu"));
-					patient.setSexe(Patient.SexePatient.valueOf(resultSet.getString("sexe")));
 					patient.setDossierMedical(resultSet.getString("dossier_medical"));
 				}
 				return patient;
@@ -167,7 +164,6 @@ public class ImpPatientDAO implements PatientDAO {
 				ResultSet rs = preparedStatement.executeQuery();
 				if (rs.next()) {
 					patient.setNumeroSecu(rs.getString("numero_secu"));
-					patient.setSexe(Patient.SexePatient.valueOf(rs.getString("sexe")));
 					patient.setDossierMedical(rs.getString("dossier_medical"));
 					patients.add(patient);
 				}

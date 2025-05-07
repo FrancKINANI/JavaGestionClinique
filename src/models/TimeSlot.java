@@ -3,11 +3,10 @@ package models;
 import java.time.LocalDateTime;
 
 public class TimeSlot {
-	private enum Statut { disponible, reserve, indisponible };
     private int id;
     private LocalDateTime debut;
     private LocalDateTime fin;
-    private Statut statut;
+    private StatutTimeSlot statut;
 
     // Getters et Setters
     public int getId() {
@@ -34,14 +33,14 @@ public class TimeSlot {
         this.fin = fin;
     }
 
-    public Statut getStatut() {
+    public StatutTimeSlot getStatut() {
         return statut;
     }
 
     public void setStatut(String statut) {
-        this.statut = statut.equals("disponible") ? Statut.disponible : 
-					  statut.equals("reserve") ? Statut.reserve : 
-					  Statut.indisponible;
+        this.statut = statut.equals("disponible") ? StatutTimeSlot.DISPONIBLE : 
+					  statut.equals("reserve") ? StatutTimeSlot.RESERVE : 
+						  StatutTimeSlot.INDISPONIBLE;
     }
 
     public int getDuree() {

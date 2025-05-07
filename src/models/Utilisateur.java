@@ -1,9 +1,8 @@
 package models;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public abstract class Utilisateur {
-	private enum ROLE { PATIENT, DOCTEUR, SCHEDULER, ADMINISTRATEUR };
-	
+public abstract class Utilisateur {	
     private int id;
     private String nom;
     private String prenom;
@@ -14,6 +13,7 @@ public abstract class Utilisateur {
     private ROLE role;
     private String password;
     private LocalDateTime derniereConnexion;
+    private List<RendezVous> rendezVousList;
 
     // Getters et Setters
     public int getId() {
@@ -94,6 +94,14 @@ public abstract class Utilisateur {
 
 	public void setDerniereConnexion(LocalDateTime derniereConnexion) {
 		this.derniereConnexion = derniereConnexion;
+	}
+
+	public List<RendezVous> getRendezVousList() {
+		return rendezVousList;
+	}
+
+	public void setRendezVousList(List<RendezVous> rendezVousList) {
+		this.rendezVousList = rendezVousList;
 	}
 }
 

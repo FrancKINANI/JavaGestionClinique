@@ -1,17 +1,17 @@
 package models;
 
 import java.security.Timestamp;
-import java.time.LocalDateTime;
 
 public class RendezVous {
     private int id;
     private Timestamp  dateCreation;
     private StatutRendezVous statut;
-    private String commentaire;
     private int duree;
-    private int patientId;
-    private int timeSlotId;
-    private int salleId;
+    private String commentaire;
+    private Patient patient;
+    private TimeSlot timeSlot;
+    private Salle salle;
+    private Docteur docteur;
 
     // Getters et Setters
     public int getId() {
@@ -52,44 +52,6 @@ public class RendezVous {
         this.duree = duree;
     }
 
-    public boolean annuler() {
-        // Logique pour annuler le rendez-vous
-        return true;
-    }
-
-    public boolean reporter(LocalDateTime nouvelleDate) {
-        // Logique pour reporter le rendez-vous
-        return true;
-    }
-
-    public boolean terminer(String commentaire) {
-        // Logique pour terminer le rendez-vous
-        return true;
-    }
-
-	public int getTimeSlotId() {
-		return timeSlotId;
-	}
-
-	public void setTimeSlotId(int timeSlotId) {
-		this.timeSlotId = timeSlotId;
-	}
-
-	public int getPatientId() {
-		return patientId;
-	}
-
-	public void setPatientId(int patientId) {
-		this.patientId = patientId;
-	}
-
-	public int getSalleId() {
-		return salleId;
-	}
-
-	public void setSalleId(int salleId) {
-		this.salleId = salleId;
-	}
 
 	public Timestamp getDateCreation() {
 		return dateCreation;
@@ -97,5 +59,37 @@ public class RendezVous {
 
 	public void setDateCreation(Timestamp dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	public TimeSlot getTimeSlot() {
+		return timeSlot;
+	}
+
+	public void setTimeSlot(TimeSlot timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
+	public Salle getSalle() {
+		return salle;
+	}
+
+	public void setSalle(Salle salle) {
+		this.salle = salle;
+	}
+
+	public Docteur getDocteur() {
+		return docteur;
+	}
+
+	public void setDocteur(Docteur docteur) {
+		this.docteur = docteur;
 	}
 }
