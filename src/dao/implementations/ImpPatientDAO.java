@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.interfaces.PatientDAO;
+import identification.PasswordUtils;
 import models.Patient;
 
 public class ImpPatientDAO implements PatientDAO {
@@ -32,7 +33,7 @@ public class ImpPatientDAO implements PatientDAO {
             preparedStatement.setString(4, patient.getTelephone());
             preparedStatement.setString(5, patient.getEmail());
             preparedStatement.setObject(6, patient.getDateNaissance());
-            preparedStatement.setString(8, patient.getPassword());
+            preparedStatement.setString(8, PasswordUtils.hashPassword(patient.getPassword()));
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {

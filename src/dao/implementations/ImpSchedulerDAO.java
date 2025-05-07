@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import dao.interfaces.SchedulerDAO;
+import identification.PasswordUtils;
 import models.Scheduler;
 
 public class ImpSchedulerDAO implements SchedulerDAO {
@@ -30,7 +31,7 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 			preparedStatement.setString(4, scheduler.getTelephone());
 			preparedStatement.setString(5, scheduler.getEmail());
 			preparedStatement.setObject(6, scheduler.getDateNaissance());
-			preparedStatement.setString(8, scheduler.getPassword());
+			preparedStatement.setString(8, PasswordUtils.hashPassword(scheduler.getPassword()));
 
 			int affectedRows = preparedStatement.executeUpdate();
 			if (affectedRows > 0) {

@@ -10,6 +10,7 @@ import java.util.List;
 
 import dao.interfaces.DocteurDAO;
 import models.Docteur;
+import identification.PasswordUtils;
 
 class ImpDocteurDao implements DocteurDAO {
     private Connection connection;
@@ -34,7 +35,7 @@ class ImpDocteurDao implements DocteurDAO {
             preparedStatement.setString(4, docteur.getTelephone());
             preparedStatement.setString(5, docteur.getEmail());
             preparedStatement.setObject(6, docteur.getDateNaissance());
-            preparedStatement.setString(8, docteur.getPassword());
+            preparedStatement.setString(8, PasswordUtils.hashPassword(docteur.getPassword()));
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
