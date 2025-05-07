@@ -2,7 +2,7 @@ package models;
 
 import java.util.List;
 
-public class Docteur extends Personne {
+public class Docteur extends Utilisateur {
     private String specialite;
     private String matricule;
     private List<RendezVous> rendezVousList;

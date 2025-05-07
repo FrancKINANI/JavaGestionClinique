@@ -1,5 +1,5 @@
 package models;
-public class Patient extends Personne {
+public class Patient extends Utilisateur {
 	public enum SexePatient { HOMME, FEMME, AUTRE };
     private String numeroSecu;
     private SexePatient sexe;

@@ -3,10 +3,11 @@ package models;
 import java.time.LocalDateTime;
 
 public class TimeSlot {
+	private enum Statut { disponible, reserve, indisponible };
     private int id;
     private LocalDateTime debut;
     private LocalDateTime fin;
-    private String statut;
+    private Statut statut;
 
     // Getters et Setters
     public int getId() {
@@ -33,30 +34,18 @@ public class TimeSlot {
         this.fin = fin;
     }
 
-    public String getStatut() {
+    public Statut getStatut() {
         return statut;
     }
 
     public void setStatut(String statut) {
-        this.statut = statut;
+        this.statut = statut.equals("disponible") ? Statut.disponible : 
+					  statut.equals("reserve") ? Statut.reserve : 
+					  Statut.indisponible;
     }
 
     public int getDuree() {
         return (int) java.time.Duration.between(debut, fin).toMinutes();
-    }
-
-    public boolean estDisponible() {
-        return true && statut.equals("disponible");
-    }
-
-    public boolean reserver() {
-        // Logique pour réserver le créneau
-        return true && statut.equals("disponible");
-    }
-
-    public boolean liberer() {
-        // Logique pour libérer le créneau
-        return true && statut.equals("réservé");
     }
 }
 

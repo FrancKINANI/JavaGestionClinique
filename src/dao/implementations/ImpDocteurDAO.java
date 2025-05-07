@@ -14,7 +14,7 @@ import models.Docteur;
 class ImpDocteurDao implements DocteurDAO {
     private Connection connection;
     private String tableName = "docteurs";
-    private String superTableName = "personnes";
+    private String superTableName = "utilisateurs";
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
     private String sql;
@@ -25,7 +25,7 @@ class ImpDocteurDao implements DocteurDAO {
 
     @Override
     public void addDocteur(Docteur docteur) {
-        sql = "INSERT INTO " + superTableName + " (nom, prenom, adresse, telephone, email, date_naissance, type_personne, mot_de_passe) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        sql = "INSERT INTO " + superTableName + " (nom, prenom, adresse, telephone, email, date_naissance, mot_de_passe) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, docteur.getNom());
@@ -34,7 +34,6 @@ class ImpDocteurDao implements DocteurDAO {
             preparedStatement.setString(4, docteur.getTelephone());
             preparedStatement.setString(5, docteur.getEmail());
             preparedStatement.setObject(6, docteur.getDateNaissance());
-            preparedStatement.setString(7, "DOCTEUR");
             preparedStatement.setString(8, docteur.getPassword());
 
             int affectedRows = preparedStatement.executeUpdate();
@@ -42,11 +41,18 @@ class ImpDocteurDao implements DocteurDAO {
                 resultSet = preparedStatement.getGeneratedKeys();
                 if (resultSet.next()) {
                     int id = resultSet.getInt(1);
-                    sql = "INSERT INTO " + tableName + " (id, specialite, matricule) VALUES (?, ?, ?)";
+                    sql = "INSERT INTO " + tableName + " (utilisateur_id, specialite, matricule) VALUES (?, ?, ?)";
                     preparedStatement = connection.prepareStatement(sql);
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, docteur.getSpecialite());
                     preparedStatement.setString(3, docteur.getMatricule());
+                    preparedStatement.executeUpdate();
+                    
+                    // Insert into the role table
+                    sql = "INSERT INTO roles (utilisateur_id, role) VALUES (?, ?)";
+                    preparedStatement = connection.prepareStatement(sql);
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setString(2, "DOCTEUR");
                     preparedStatement.executeUpdate();
                 }
             }
@@ -80,11 +86,10 @@ class ImpDocteurDao implements DocteurDAO {
 
     @Override
     public void deleteDocteur(int id) {
-        sql = "DELETE FROM " + tableName + " WHERE id = ?"; // DELETE FROM " + superTableName + " WHERE id = ?";
+        sql = "DELETE FROM " + tableName + " WHERE id = ?";
         try {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            //preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,148 +136,90 @@ class ImpDocteurDao implements DocteurDAO {
     @Override
     public List<Docteur> getAllDocteurs() {
         List<Docteur> docteurs = new ArrayList<>();
-        sql = "SELECT * FROM " + superTableName + " WHERE type_personne = 'DOCTEUR'";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Docteur docteur = new Docteur();
-                docteur.setId(resultSet.getInt("id"));
-                docteur.setNom(resultSet.getString("nom"));
-                docteur.setPrenom(resultSet.getString("prenom"));
-                docteur.setAdresse(resultSet.getString("adresse"));
-                docteur.setTelephone(resultSet.getString("telephone"));
-                docteur.setEmail(resultSet.getString("email"));
-                docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-                
-                // Récupérer les détails du docteur
-                sql = "SELECT * FROM " + tableName + " WHERE id = ?";
-                PreparedStatement docteurStatement = connection.prepareStatement(sql);
-                docteurStatement.setInt(1, docteur.getId());
-                ResultSet docteurResultSet = docteurStatement.executeQuery();
-                if (docteurResultSet.next()) {
-                    docteur.setSpecialite(docteurResultSet.getString("specialite"));
-                    docteur.setMatricule(docteurResultSet.getString("matricule"));
-                }
-                docteurs.add(docteur);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            closeResources();
-        }
-        return docteurs;
+        sql = "SELECT * FROM " + superTableName + " join " + tableName + " ON " + superTableName + ".id = " + tableName + ".utilisateur_id";
+       try {
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Docteur docteur = new Docteur();
+				docteur.setId(resultSet.getInt("id"));
+				docteur.setNom(resultSet.getString("nom"));
+				docteur.setPrenom(resultSet.getString("prenom"));
+				docteur.setAdresse(resultSet.getString("adresse"));
+				docteur.setTelephone(resultSet.getString("telephone"));
+				docteur.setEmail(resultSet.getString("email"));
+				docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
+				docteur.setSpecialite(resultSet.getString("specialite"));
+				docteur.setMatricule(resultSet.getString("matricule"));
+				
+				docteurs.add(docteur);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		return docteurs;
     }
-
+    
     @Override
     public List<Docteur> getDocteursBySpecialite(String specialite) {
         List<Docteur> docteurs = new ArrayList<>();
-        sql = "SELECT * FROM " + superTableName + " WHERE type_personne = 'DOCTEUR' AND id IN (SELECT id FROM " + tableName + " WHERE specialite = ?)";
+        sql = "SELECT * FROM " + superTableName + " join " + tableName + " ON " + superTableName + ".id = " + tableName + ".utilisateur_id WHERE" + tableName + ".specialite = ?";
         try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, specialite);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Docteur docteur = new Docteur();
-                docteur.setId(resultSet.getInt("id"));
-                docteur.setNom(resultSet.getString("nom"));
-                docteur.setPrenom(resultSet.getString("prenom"));
-                docteur.setAdresse(resultSet.getString("adresse"));
-                docteur.setTelephone(resultSet.getString("telephone"));
-                docteur.setEmail(resultSet.getString("email"));
-                docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-                
-                // Récupérer les détails du docteur
-                sql = "SELECT * FROM " + tableName + " WHERE id = ?";
-                PreparedStatement docteurStatement = connection.prepareStatement(sql);
-                docteurStatement.setInt(1, docteur.getId());
-                ResultSet docteurResultSet = docteurStatement.executeQuery();
-                if (docteurResultSet.next()) {
-                    docteur.setSpecialite(docteurResultSet.getString("specialite"));
-                    docteur.setMatricule(docteurResultSet.getString("matricule"));
-                }
-                docteurs.add(docteur);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            closeResources();
-        }
-        return docteurs;
-    }
-
-    @Override
-    public List<Docteur> getDocteursByNom(String nom) {
-        List<Docteur> docteurs = new ArrayList<>();
-        sql = "SELECT * FROM " + superTableName + " WHERE type_personne = 'DOCTEUR' AND nom LIKE ?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, "%" + nom + "%");
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Docteur docteur = new Docteur();
-                docteur.setId(resultSet.getInt("id"));
-                docteur.setNom(resultSet.getString("nom"));
-                docteur.setPrenom(resultSet.getString("prenom"));
-                docteur.setAdresse(resultSet.getString("adresse"));
-                docteur.setTelephone(resultSet.getString("telephone"));
-                docteur.setEmail(resultSet.getString("email"));
-                docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-                
-                // Récupérer les détails du docteur
-                sql = "SELECT * FROM " + tableName + " WHERE id = ?";
-                PreparedStatement docteurStatement = connection.prepareStatement(sql);
-                docteurStatement.setInt(1, docteur.getId());
-                ResultSet docteurResultSet = docteurStatement.executeQuery();
-                if (docteurResultSet.next()) {
-                    docteur.setSpecialite(docteurResultSet.getString("specialite"));
-                    docteur.setMatricule(docteurResultSet.getString("matricule"));
-                }
-                docteurs.add(docteur);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            closeResources();
-        }
-        return docteurs;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, specialite);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Docteur docteur = new Docteur();
+				docteur.setId(resultSet.getInt("id"));
+				docteur.setNom(resultSet.getString("nom"));
+				docteur.setPrenom(resultSet.getString("prenom"));
+				docteur.setAdresse(resultSet.getString("adresse"));
+				docteur.setTelephone(resultSet.getString("telephone"));
+				docteur.setEmail(resultSet.getString("email"));
+				docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
+				docteur.setSpecialite(resultSet.getString("specialite"));
+				docteur.setMatricule(resultSet.getString("matricule"));
+				
+				docteurs.add(docteur);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		return docteurs;
     }
 
     @Override
     public List<Docteur> getDocteursByMatricule(String matricule) {
         List<Docteur> docteurs = new ArrayList<>();
-        sql = "SELECT * FROM " + superTableName + " WHERE type_personne = 'DOCTEUR' AND id IN (SELECT id FROM " + tableName + " WHERE matricule = ?)";
+        sql = "SELECT * FROM " + superTableName + " join " + tableName + " ON " + superTableName + ".id = " + tableName + ".utilisateur_id WHERE" + tableName + ".matricule = ?";
         try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, matricule);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Docteur docteur = new Docteur();
-                docteur.setId(resultSet.getInt("id"));
-                docteur.setNom(resultSet.getString("nom"));
-                docteur.setPrenom(resultSet.getString("prenom"));
-                docteur.setAdresse(resultSet.getString("adresse"));
-                docteur.setTelephone(resultSet.getString("telephone"));
-                docteur.setEmail(resultSet.getString("email"));
-                docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-                
-                // Récupérer les détails du docteur
-                sql = "SELECT * FROM " + tableName + " WHERE id = ?";
-                PreparedStatement docteurStatement = connection.prepareStatement(sql);
-                docteurStatement.setInt(1, docteur.getId());
-                ResultSet docteurResultSet = docteurStatement.executeQuery();
-                if (docteurResultSet.next()) {
-                    docteur.setSpecialite(docteurResultSet.getString("specialite"));
-                    docteur.setMatricule(docteurResultSet.getString("matricule"));
-                }
-                docteurs.add(docteur);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            closeResources();
-        }
-        return docteurs;
+        		preparedStatement = connection.prepareStatement(sql);
+        		preparedStatement.setString(1, matricule);
+        		resultSet = preparedStatement.executeQuery();
+        		while (resultSet.next()) {
+					Docteur docteur = new Docteur();
+					docteur.setId(resultSet.getInt("id"));
+					docteur.setNom(resultSet.getString("nom"));
+					docteur.setPrenom(resultSet.getString("prenom"));
+					docteur.setAdresse(resultSet.getString("adresse"));
+					docteur.setTelephone(resultSet.getString("telephone"));
+					docteur.setEmail(resultSet.getString("email"));
+					docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
+					docteur.setSpecialite(resultSet.getString("specialite"));
+					docteur.setMatricule(resultSet.getString("matricule"));
+						
+					docteurs.add(docteur);
+        							}
+    	} catch (Exception e) {
+				e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		return docteurs;
     }
 
     private void closeResources() {

@@ -3,7 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scheduler extends Personne {
+public class Scheduler extends Utilisateur {
     private String fonction;
 
     // Getters et Setters

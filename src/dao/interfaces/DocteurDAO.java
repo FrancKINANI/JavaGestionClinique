@@ -14,6 +14,5 @@ public interface DocteurDAO {
 	
 	// Méthodes spécifiques à la gestion des docteurs
 	public List<Docteur> getDocteursBySpecialite(String specialite);
-	public List<Docteur> getDocteursByNom(String nom);
 	public List<Docteur> getDocteursByMatricule(String matricule);
 }

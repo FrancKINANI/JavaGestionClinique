@@ -1,7 +1,7 @@
 package models;
 import java.time.LocalDateTime;
 
-public abstract class Personne {
+public abstract class Utilisateur {
 	private enum ROLE { PATIENT, DOCTEUR, SCHEDULER, ADMINISTRATEUR };
 	
     private int id;
