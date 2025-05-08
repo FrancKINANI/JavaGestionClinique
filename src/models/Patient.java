@@ -1,7 +1,11 @@
 package models;
+
+import java.util.List;
+
 public class Patient extends Utilisateur {
     private String numeroSecu;
     private String dossierMedical;
+    private List<RendezVous> rendezVousList;
 
     // Getters et Setters
     public String getNumeroSecu() {
@@ -20,9 +24,21 @@ public class Patient extends Utilisateur {
         this.dossierMedical = dossierMedical;
     }
  
-    	
-    public String toString() {
-		return "Patient [numeroSecu=" + numeroSecu + ", dossierMedical=" + dossierMedical + "]";
-	}    
     
+    public List<RendezVous> getRendezVousList() {
+		return rendezVousList;
+	}
+
+	public void setRendezVousList(List<RendezVous> rendezVousList) {
+		this.rendezVousList = rendezVousList;
+	}
+
+	@Override
+	public String toString() {
+		return "Patient{" +
+				"numeroSecu='" + numeroSecu + '\'' +
+				", dossierMedical='" + dossierMedical + '\'' +
+				", rendezVousList=" + rendezVousList +
+				"} " + super.toString();
+	}
 }

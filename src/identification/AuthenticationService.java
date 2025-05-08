@@ -28,8 +28,6 @@ public class AuthenticationService {
             if (rs.next()) {
                 String storedHash = rs.getString("mot_de_passe");
                 String inputHash = PasswordUtils.hashPassword(plainPassword);
-                System.out.println("Mot de passe stocké : " + storedHash);
-                System.out.println("Mot de passe saisi : " + inputHash);
                 return storedHash.equalsIgnoreCase(inputHash);
             }
             return false;
@@ -37,4 +35,5 @@ public class AuthenticationService {
             throw new RuntimeException("Erreur d'authentification", e);
         }
     }
+    
 }

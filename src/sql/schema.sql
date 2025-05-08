@@ -69,6 +69,13 @@ CREATE TABLE time_slots (
     UNIQUE KEY creneau_unique (debut, fin, docteur_id)
 );
 
+-- Table pour les schedulers
+CREATE TABLE schedulers (
+    utilisateur_id INT PRIMARY KEY,
+    fonction VARCHAR(100) NOT NULL,
+	FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
+);
+
 -- Table pour les rendez-vous (intègre les informations de réservation)
 CREATE TABLE rendez_vous (
     id INT AUTO_INCREMENT PRIMARY KEY,

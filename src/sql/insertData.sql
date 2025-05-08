@@ -44,6 +44,10 @@ INSERT INTO docteurs (utilisateur_id, specialite, matricule) VALUES
 (4, 'Cardiologie', 'CARD7654321'),
 (5, 'Dermatologie', 'DERM1234567');
 
+-- Informations specifiques aux schedulers
+INSERT INTO schedulers (utilisateur_id, fonction) VALUES
+(6, 'Gestion des rendez-vous');
+
 -- Créneaux horaires disponibles
 INSERT INTO time_slots (debut, fin, docteur_id, statut) VALUES
 -- Créneaux du Dr Legrand (Cardiologie)

@@ -8,6 +8,7 @@ public class RendezVous {
     private StatutRendezVous statut;
     private int duree;
     private String commentaire;
+    private Scheduler scheduler;
     private Patient patient;
     private TimeSlot timeSlot;
     private Salle salle;
@@ -91,5 +92,13 @@ public class RendezVous {
 
 	public void setDocteur(Docteur docteur) {
 		this.docteur = docteur;
+	}
+
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
+
+	public void setScheduler(Scheduler scheduler) {
+		this.scheduler = scheduler;
 	}
 }
