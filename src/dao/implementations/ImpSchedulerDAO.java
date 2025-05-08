@@ -162,7 +162,6 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 			if (preparedStatement != null) preparedStatement.close();
 			if (resultSet != null) resultSet.close();
 			if (statement != null) statement.close();
-			if (connection != null) connection.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

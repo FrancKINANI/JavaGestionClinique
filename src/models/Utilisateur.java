@@ -10,7 +10,7 @@ public abstract class Utilisateur {
     private String telephone;
     private String email;
     private LocalDateTime dateNaissance;
-    private ROLE role;
+    private Role role;
     private String password;
     private LocalDateTime derniereConnexion;
     private List<RendezVous> rendezVousList;
@@ -72,11 +72,11 @@ public abstract class Utilisateur {
         this.dateNaissance = dateNaissance;
     }
 
-	public ROLE getRole() {
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(ROLE role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 

@@ -227,7 +227,6 @@ class ImpDocteurDao implements DocteurDAO {
         try {
             if (preparedStatement != null) preparedStatement.close();
             if (resultSet != null) resultSet.close();
-            if (connection != null) connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

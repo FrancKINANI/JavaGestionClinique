@@ -203,9 +203,6 @@ public class ImpPatientDAO implements PatientDAO {
 			if (resultSet != null) {
 				resultSet.close();
 			}
-			if (connection != null) {
-				connection.close();
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
