@@ -10,6 +10,4 @@ public interface SalleDAO {
 	public void deleteSalle(int id);
 	public Salle getSalleById(int id);
 	public List<Salle> getAllSalles();
-	public List<Salle> getSallesByType(String type);
-
 }

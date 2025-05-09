@@ -49,29 +49,69 @@ INSERT INTO schedulers (utilisateur_id, fonction) VALUES
 (6, 'Gestion des rendez-vous');
 
 -- Créneaux horaires disponibles
-INSERT INTO time_slots (debut, fin, docteur_id, statut) VALUES
+INSERT INTO time_slots (debut, fin, statut) VALUES
 -- Créneaux du Dr Legrand (Cardiologie)
-('2023-12-01 09:00:00', '2023-12-01 09:30:00', 4, 'DISPONIBLE'),
-('2023-12-01 10:00:00', '2023-12-01 10:30:00', 4, 'DISPONIBLE'),
-('2023-12-01 11:00:00', '2023-12-01 11:30:00', 4, 'DISPONIBLE'),
+('2023-12-01 09:00:00', '2023-12-01 09:30:00', 'DISPONIBLE'),
+('2023-12-01 10:00:00', '2023-12-01 10:30:00', 'DISPONIBLE'),
+('2023-12-01 11:00:00', '2023-12-01 11:30:00', 'DISPONIBLE'),
 
 -- Créneaux du Dr Petit (Dermatologie)
-('2023-12-01 14:00:00', '2023-12-01 14:30:00', 5, 'DISPONIBLE'),
-('2023-12-01 15:00:00', '2023-12-01 15:30:00', 5, 'DISPONIBLE'),
+('2023-12-01 14:00:00', '2023-12-01 14:30:00', 'DISPONIBLE'),
+('2023-12-01 15:00:00', '2023-12-01 15:30:00', 'DISPONIBLE'),
 
 -- Créneaux déjà réservés
-('2023-12-02 09:00:00', '2023-12-02 09:30:00', 4, 'RESERVE'),
-('2023-12-02 10:00:00', '2023-12-02 10:30:00', 5, 'RESERVE');
+('2023-12-02 09:00:00', '2023-12-02 09:30:00', 'RESERVE'),
+('2023-12-02 10:00:00', '2023-12-02 10:30:00', 'RESERVE');
 
--- Rendez-vous (les créneaux réservés correspondent à ces rendez-vous)
-INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id) VALUES
 -- Rendez-vous à venir
-(NOW(), 'PLANIFIE', 'Première consultation cardiologie', 30, 1, 6, 1),
-(NOW(), 'CONFIRME', 'Suivi dermatologique', 30, 2, 7, 3),
+INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+VALUES
+  (NOW(), 'PLANIFIE', 'Première consultation cardiologie', 30, 1, 6, 1, 1, 4),
+  (NOW(), 'CONFIRME', 'Suivi dermatologique', 30, 2, 7, 3, 1, 2);
 
--- Rendez-vous passé
-('2023-11-15 10:00:00', 'TERMINE', 'Contrôle annuel', 30, 3, 8, 2),
-('2023-11-20 14:30:00', 'TERMINE', 'Examen de routine', 30, 1, 9, 1),
+-- Rendez-vous passés  
+INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+VALUES
+  ('2023-11-15 10:00:00', 'TERMINE', 'Contrôle annuel', 30, 3, 8, 2, 1, 5),
+  ('2023-11-20 14:30:00', 'TERMINE', 'Examen de routine', 30, 1, 9, 1, 1, 4);
 
--- Rendez-vous annulé
-('2023-11-10 11:00:00', 'ANNULE', 'Patient a reporté', 30, 2, 10, NULL);
+-- Rendez-vous annulés
+INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+VALUES
+  ('2023-11-10 11:00:00', 'ANNULE', 'Patient a reporté', 30, 2, 10, NULL, 1, 1),
+  ('2023-11-12 15:00:00', 'ANNULE', 'Patient a annulé', 30, 3, 11, NULL, 1, 1);
+
+  -- Rendez-vous reportés
+  INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+  VALUES
+  ('2023-11-18 10:00:00', 'REPORTE', 'Patient a demandé un report', 30, 1, 12, NULL, 1, 1),
+  ('2023-11-22 14:30:00', 'REPORTE', 'Patient a demandé un report', 30, 2, 13, NULL, 1, 1);
+  
+  -- Rendez-vous en cours
+  INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+  VALUES
+  ('2023-11-25 10:00:00', 'EN_COURS', 'Consultation en cours', 30, 3, 14, NULL, 1, 1),
+  ('2023-11-26 14:30:00', 'EN_COURS', 'Consultation en cours', 30, 1, 15, NULL, 1, 1);
+  
+  -- Rendez-vous confirmés
+  
+  INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+  VALUES
+  ('2023-11-28 10:00:00', 'CONFIRME', 'Consultation confirmée', 30, 2, 16, NULL, 1, 1),
+  ('2023-11-29 14:30:00', 'CONFIRME', 'Consultation confirmée', 30, 3, 17, NULL, 1, 1);
+  -- Rendez-vous planifiés
+  INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+  VALUES
+  ('2023-11-30 10:00:00', 'PLANIFIE', 'Consultation planifiée', 30, 1, 18, NULL, 1, 1),
+  ('2023-12-01 14:30:00', 'PLANIFIE', 'Consultation planifiée', 30, 2, 19, NULL, 1, 1);
+  -- Rendez-vous en attente	
+  INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+  VALUES
+  ('2023-12-02 10:00:00', 'EN_ATTENTE', 'Consultation en attente', 30, 3, 20, NULL, 1, 1),
+  ('2023-12-03 14:30:00', 'EN_ATTENTE', 'Consultation en attente', 30, 1, 21, NULL, 1, 1);
+  -- Rendez-vous en attente de confirmation
+  INSERT INTO rendez_vous (date_creation, statut, commentaire, duree, patient_id, time_slot_id, salle_id, scheduler_id, docteur_id)
+  VALUES
+  ('2023-12-04 10:00:00', 'EN_ATTENTE_CONFIRMATION', 'Consultation en attente de confirmation', 30, 2, 22, NULL, 1, 1),
+  ('2023-12-05 14:30:00', 'EN_ATTENTE_CONFIRMATION', 'Consultation en attente de confirmation', 30, 3, 23, NULL, 1, 1);
+  

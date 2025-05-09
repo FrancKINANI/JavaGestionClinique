@@ -16,5 +16,4 @@ public interface UtilisateurDAO {
 	 * @return The password of the user as a String.
 	 */
 	public String getPasswordByEmail(String email);
-
 }

@@ -2,7 +2,7 @@ package models;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public abstract class Utilisateur {	
+public class Utilisateur {	
     private int id;
     private String nom;
     private String prenom;

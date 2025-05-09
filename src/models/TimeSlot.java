@@ -46,5 +46,9 @@ public class TimeSlot {
     public int getDuree() {
         return (int) java.time.Duration.between(debut, fin).toMinutes();
     }
+    
+    public int getHoraire() {
+		return debut.getHour();
+	}
 }
 

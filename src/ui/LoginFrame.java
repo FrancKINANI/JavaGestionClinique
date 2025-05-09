@@ -121,10 +121,13 @@ public class LoginFrame extends JFrame {
                         
                         // Get the user's role
                         String role = roleDAO.getRoleById(userId);
-                        JOptionPane.showMessageDialog(null, "Votre rôle est : " + role);
+                		if (role == null) {
+							JOptionPane.showMessageDialog(null, "Rôle non trouvé.");
+							return;
+						}
                         
                         // Ouvrir l'interface appropriée selon le rôle
-                        openAppropriateInterface(role);
+                        openAppropriateInterface(role, userId);
                         
                     } else {
                         JOptionPane.showMessageDialog(null, "Échec de l'authentification. Vérifiez vos identifiants.");
@@ -188,17 +191,20 @@ public class LoginFrame extends JFrame {
     
     /**
      * Ouvre l'interface appropriée selon le rôle de l'utilisateur
+     * @throws IOException 
+     * @throws SQLException 
      */
-    private void openAppropriateInterface(String role) {
+    private void openAppropriateInterface(String role, int userId) throws SQLException, IOException {
         // Implémenter selon vos besoins
         if ("admin".equalsIgnoreCase(role)) {
             // Ouvrir interface admin
         } else if ("medecin".equalsIgnoreCase(role)) {
             // Ouvrir interface médecin
         } else if ("patient".equalsIgnoreCase(role)) {
-            // Ouvrir interface patient
+            PatientFrame patientFrame = new PatientFrame(userId);
+            patientFrame.setVisible(true);
         }
         // Fermer la fenêtre de login
-        // this.dispose();
+         this.dispose();
     }
 }

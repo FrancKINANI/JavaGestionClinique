@@ -87,7 +87,7 @@ class ImpDocteurDao implements DocteurDAO {
 
     @Override
     public void deleteDocteur(int id) {
-        sql = "DELETE FROM " + tableName + " WHERE id = ?";
+        sql = "DELETE FROM " + tableName + " WHERE utilisateur_id = ?";
         try {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -117,7 +117,7 @@ class ImpDocteurDao implements DocteurDAO {
                 docteur.setEmail(resultSet.getString("email"));
                 docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
                 // Récupérer les détails du docteur
-                sql = "SELECT * FROM " + tableName + " WHERE id = ?";
+                sql = "SELECT * FROM " + tableName + " WHERE utilisateur_id = ?";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setInt(1, id);
                 ResultSet docteurResultSet = preparedStatement.executeQuery();
@@ -150,8 +150,16 @@ class ImpDocteurDao implements DocteurDAO {
 				docteur.setTelephone(resultSet.getString("telephone"));
 				docteur.setEmail(resultSet.getString("email"));
 				docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-				docteur.setSpecialite(resultSet.getString("specialite"));
-				docteur.setMatricule(resultSet.getString("matricule"));
+				
+				// Récupérer les détails du docteur
+				sql = "SELECT * FROM " + tableName + " WHERE utilisateur_id = ?";
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setInt(1, resultSet.getInt("id"));
+				ResultSet docteurResultSet = preparedStatement.executeQuery();
+				if (docteurResultSet.next()) {
+					docteur.setSpecialite(docteurResultSet.getString("specialite"));
+					docteur.setMatricule(docteurResultSet.getString("matricule"));
+				}
 				
 				docteurs.add(docteur);
 			}
@@ -180,8 +188,16 @@ class ImpDocteurDao implements DocteurDAO {
 				docteur.setTelephone(resultSet.getString("telephone"));
 				docteur.setEmail(resultSet.getString("email"));
 				docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-				docteur.setSpecialite(resultSet.getString("specialite"));
-				docteur.setMatricule(resultSet.getString("matricule"));
+				
+				// Récupérer les détails du docteur
+				sql = "SELECT * FROM " + tableName + " WHERE utilisateur_id = ?";
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setInt(1, resultSet.getInt("id"));
+				ResultSet docteurResultSet = preparedStatement.executeQuery();
+				if (docteurResultSet.next()) {
+					docteur.setSpecialite(docteurResultSet.getString("specialite"));
+					docteur.setMatricule(docteurResultSet.getString("matricule"));
+				}
 				
 				docteurs.add(docteur);
 			}
@@ -210,8 +226,17 @@ class ImpDocteurDao implements DocteurDAO {
 					docteur.setTelephone(resultSet.getString("telephone"));
 					docteur.setEmail(resultSet.getString("email"));
 					docteur.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-					docteur.setSpecialite(resultSet.getString("specialite"));
-					docteur.setMatricule(resultSet.getString("matricule"));
+
+
+					// Récupérer les détails du docteur
+					sql = "SELECT * FROM " + tableName + " WHERE utilisateur_id = ?";
+					preparedStatement = connection.prepareStatement(sql);
+					preparedStatement.setInt(1, resultSet.getInt("id"));
+					ResultSet docteurResultSet = preparedStatement.executeQuery();
+					if (docteurResultSet.next()) {
+						docteur.setSpecialite(docteurResultSet.getString("specialite"));
+						docteur.setMatricule(docteurResultSet.getString("matricule"));
+					}
 						
 					docteurs.add(docteur);
         							}

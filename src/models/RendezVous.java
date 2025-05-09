@@ -1,10 +1,8 @@
 package models;
 
-import java.security.Timestamp;
-
 public class RendezVous {
     private int id;
-    private Timestamp  dateCreation;
+    private java.sql.Timestamp  dateCreation;
     private StatutRendezVous statut;
     private int duree;
     private String commentaire;
@@ -54,11 +52,11 @@ public class RendezVous {
     }
 
 
-	public Timestamp getDateCreation() {
+	public java.sql.Timestamp getDateCreation() {
 		return dateCreation;
 	}
 
-	public void setDateCreation(Timestamp dateCreation) {
+	public void setDateCreation(java.sql.Timestamp dateCreation) {
 		this.dateCreation = dateCreation;
 	}
 

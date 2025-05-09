@@ -63,10 +63,8 @@ CREATE TABLE time_slots (
     id INT AUTO_INCREMENT PRIMARY KEY,
     debut DATETIME NOT NULL,
     fin DATETIME NOT NULL,
-    docteur_id INT NOT NULL,
     statut ENUM('DISPONIBLE', 'RESERVE', 'INDISPONIBLE') NOT NULL DEFAULT 'DISPONIBLE',
-    FOREIGN KEY (docteur_id) REFERENCES docteurs(utilisateur_id) ON DELETE CASCADE,
-    UNIQUE KEY creneau_unique (debut, fin, docteur_id)
+    UNIQUE KEY creneau_unique (debut, fin)
 );
 
 -- Table pour les schedulers
@@ -86,9 +84,13 @@ CREATE TABLE rendez_vous (
     patient_id INT NOT NULL,
     time_slot_id INT NOT NULL,
     salle_id INT,
+    scheduler_id INT,
+    docteur_id INT,
     FOREIGN KEY (patient_id) REFERENCES patients(utilisateur_id) ON DELETE CASCADE,
     FOREIGN KEY (time_slot_id) REFERENCES time_slots(id) ON DELETE CASCADE,
-    FOREIGN KEY (salle_id) REFERENCES salles(id) ON DELETE SET NULL
+    FOREIGN KEY (salle_id) REFERENCES salles(id) ON DELETE SET NULL,
+    FOREIGN KEY (scheduler_id) REFERENCES schedulers(utilisateur_id) ON DELETE SET NULL,
+    FOREIGN KEY (docteur_id) REFERENCES docteurs(utilisateur_id) ON DELETE SET NULL
 );
 
 -- Index pour optimiser les performances

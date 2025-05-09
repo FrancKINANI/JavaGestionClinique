@@ -21,6 +21,10 @@ public class ImpPatientDAO implements PatientDAO {
 	private ResultSet resultSet = null;
 	private String sql = null;
 	
+	public ImpPatientDAO(Connection connection) {
+		this.connection = connection;
+	}
+	
 	
 	@Override
 	public void addPatient(Patient patient) {
@@ -40,7 +44,7 @@ public class ImpPatientDAO implements PatientDAO {
             	resultSet = preparedStatement.getGeneratedKeys();
 				if (resultSet.next()) {
 					int generatedId = resultSet.getInt(1);
-					sql = "INSERT INTO " + tableName + " (id, numero_secu, dossier_medical) VALUES (?, ?, ?, ?)";
+					sql = "INSERT INTO " + tableName + " (utilisateur_id, numero_secu, dossier_medical) VALUES (?, ?, ?, ?)";
 					preparedStatement = connection.prepareStatement(sql);
 					preparedStatement.setInt(1, generatedId);
 					preparedStatement.setString(2, patient.getNumeroSecu());;
@@ -77,7 +81,7 @@ public class ImpPatientDAO implements PatientDAO {
 
 			int affectedRows = preparedStatement.executeUpdate();
 			if (affectedRows > 0) {
-				sql = "UPDATE " + tableName + " SET numero_secu = ?, dossier_medical = ? WHERE id = ?";
+				sql = "UPDATE " + tableName + " SET numero_secu = ?, dossier_medical = ? WHERE utilisateur_id = ?";
 				preparedStatement = connection.prepareStatement(sql);
 				preparedStatement.setString(1, patient.getNumeroSecu());
 				preparedStatement.setString(3, patient.getDossierMedical());
@@ -93,7 +97,7 @@ public class ImpPatientDAO implements PatientDAO {
 
 	@Override
 	public void deletePatient(int id) {
-		sql = "DELETE FROM " + tableName + " WHERE id = ?";
+		sql = "DELETE FROM " + tableName + " WHERE utilisateur_id = ?";
 		try {
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, id);
@@ -123,7 +127,7 @@ public class ImpPatientDAO implements PatientDAO {
 				patient.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
 				patient.setPassword(resultSet.getString("mot_de_passe"));
 
-				sql = "SELECT * FROM " + tableName + " WHERE id = ?";
+				sql = "SELECT * FROM " + tableName + " WHERE utilisateur_id = ?";
 				preparedStatement = connection.prepareStatement(sql);
 				preparedStatement.setInt(1, id);
 				resultSet = preparedStatement.executeQuery();
@@ -159,7 +163,7 @@ public class ImpPatientDAO implements PatientDAO {
 				patient.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
 				patient.setPassword(resultSet.getString("mot_de_passe"));
 
-				sql = "SELECT * FROM " + tableName + " WHERE id = ?";
+				sql = "SELECT * FROM " + tableName + " WHERE utilisateur_id = ?";
 				preparedStatement = connection.prepareStatement(sql);
 				preparedStatement.setInt(1, patient.getId());
 				ResultSet rs = preparedStatement.executeQuery();
