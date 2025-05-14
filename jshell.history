@@ -1,0 +1,3 @@
+VAR#>mvn clean install
+VAR#>mvn clean install;
+EXPRESSION#>clear
