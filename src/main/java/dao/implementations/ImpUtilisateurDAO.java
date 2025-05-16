@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+<<<<<<< HEAD
 import models.Utilisateur;
 import dao.interfaces.UtilisateurDAO;
 import models.Role;
 import models.EnumROLE;
 import models.Admin;
+=======
+import dao.interfaces.UtilisateurDAO;
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 
 public class ImpUtilisateurDAO implements UtilisateurDAO {
 	private Connection connection;
@@ -57,6 +61,7 @@ public class ImpUtilisateurDAO implements UtilisateurDAO {
 		return null;
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public Utilisateur getUtilisateurByEmail(String email) {
 		String sql = "SELECT * FROM utilisateurs WHERE email = ?";
@@ -155,6 +160,8 @@ public class ImpUtilisateurDAO implements UtilisateurDAO {
 		return utilisateurs;
 	}
 	
+=======
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 	private void closeResources() {
 		try {
 			if (resultSet != null) {

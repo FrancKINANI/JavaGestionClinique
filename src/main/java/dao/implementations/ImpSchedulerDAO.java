@@ -189,6 +189,7 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 		}
 	}
 
+<<<<<<< HEAD
     @Override
     public Scheduler getSchedulerById(int id) {
 		sql = "SELECT * FROM " + superTableName + " WHERE id = ?";
@@ -213,4 +214,6 @@ public class ImpSchedulerDAO implements SchedulerDAO {
                 return null;
     }
 
+=======
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 }

@@ -1,6 +1,9 @@
 package dao.implementations;
 
+<<<<<<< HEAD
 import dao.interfaces.DocteurDAO;
+=======
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,10 +11,19 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import models.Docteur;
 import identification.PasswordUtils;
 
 public class ImpDocteurDAO implements DocteurDAO {
+=======
+
+import dao.interfaces.DocteurDAO;
+import models.Docteur;
+import identification.PasswordUtils;
+
+class ImpDocteurDao implements DocteurDAO {
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
     private final Connection connection;
     private final String tableName = "docteurs";
     private final String superTableName = "utilisateurs";
@@ -19,7 +31,11 @@ public class ImpDocteurDAO implements DocteurDAO {
     private ResultSet resultSet;
     private String sql;
 
+<<<<<<< HEAD
     public ImpDocteurDAO(Connection connection) {
+=======
+    public ImpDocteurDao(Connection connection) {
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
         this.connection = connection;
     }
 

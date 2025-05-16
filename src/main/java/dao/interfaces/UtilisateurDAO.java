@@ -1,7 +1,10 @@
 package dao.interfaces;
 
+<<<<<<< HEAD
 import models.Utilisateur;
 
+=======
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 public interface UtilisateurDAO {
 	/**
 	 * This method is used to get the email of a user by their ID.
@@ -18,6 +21,7 @@ public interface UtilisateurDAO {
 	 * @return The password of the user as a String.
 	 */
 	public String getPasswordByEmail(String email);
+<<<<<<< HEAD
 
 	/**
 	 * Récupère un utilisateur complet par son email.
@@ -31,4 +35,6 @@ public interface UtilisateurDAO {
 	 * @return Liste des utilisateurs
 	 */
 	public java.util.List<Utilisateur> getAllUtilisateurs();
+=======
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 }

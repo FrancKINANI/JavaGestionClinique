@@ -1,5 +1,6 @@
 package sql.config;
 
+<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,6 +10,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+=======
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 import java.util.Properties;
 
 public class DatabaseConfig {
@@ -31,6 +39,7 @@ public class DatabaseConfig {
 
         return DriverManager.getConnection(url, user, password);
     }
+<<<<<<< HEAD
 
     public static void initializeDatabase() {
         String jdbcUrl = "jdbc:mysql://localhost:3306/?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
@@ -63,4 +72,6 @@ public class DatabaseConfig {
             }
         }
     }
+=======
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 }

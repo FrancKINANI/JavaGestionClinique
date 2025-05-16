@@ -104,7 +104,11 @@ public class ImpRendezVousDAO implements RendezVousDAO {
 				rendezVous.setTimeSlot(new ImpTimeSlotDAO(conn).getTimeSlotById(resultSet.getInt("timeSlot_id")));
 				rendezVous.setSalle(new ImpSalleDAO(conn).getSalleById(resultSet.getInt("salle_id")));
 				rendezVous.setScheduler(new ImpSchedulerDAO(conn).getScheduler(resultSet.getInt("scheduler_id")));
+<<<<<<< HEAD
 				rendezVous.setDocteur(new ImpDocteurDAO(conn).getDocteurById(resultSet.getInt("docteur_id")));
+=======
+				rendezVous.setDocteur(new ImpDocteurDao(conn).getDocteurById(resultSet.getInt("docteur_id")));
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 				
 			}
 		} catch (SQLException e) {
@@ -134,7 +138,11 @@ public class ImpRendezVousDAO implements RendezVousDAO {
 				rendezVous.setTimeSlot(new ImpTimeSlotDAO(conn).getTimeSlotById(resultSet.getInt("timeSlot_id")));
 				rendezVous.setSalle(new ImpSalleDAO(conn).getSalleById(resultSet.getInt("salle_id")));
 				rendezVous.setScheduler(new ImpSchedulerDAO(conn).getScheduler(resultSet.getInt("scheduler_id")));
+<<<<<<< HEAD
 				rendezVous.setDocteur(new ImpDocteurDAO(conn).getDocteurById(resultSet.getInt("docteur_id")));
+=======
+				rendezVous.setDocteur(new ImpDocteurDao(conn).getDocteurById(resultSet.getInt("docteur_id")));
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 				
 				rendezVousList.add(rendezVous);
 			}
@@ -166,7 +174,11 @@ public class ImpRendezVousDAO implements RendezVousDAO {
 				rendezVous.setTimeSlot(new ImpTimeSlotDAO(conn).getTimeSlotById(resultSet.getInt("timeSlot_id")));
 				rendezVous.setSalle(new ImpSalleDAO(conn).getSalleById(resultSet.getInt("salle_id")));
 				rendezVous.setScheduler(new ImpSchedulerDAO(conn).getScheduler(resultSet.getInt("scheduler_id")));
+<<<<<<< HEAD
 				rendezVous.setDocteur(new ImpDocteurDAO(conn).getDocteurById(resultSet.getInt("docteur_id")));
+=======
+				rendezVous.setDocteur(new ImpDocteurDao(conn).getDocteurById(resultSet.getInt("docteur_id")));
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 				
 				rendezVousList.add(rendezVous);
 			}
@@ -198,7 +210,11 @@ public class ImpRendezVousDAO implements RendezVousDAO {
 				rendezVous.setTimeSlot(new ImpTimeSlotDAO(conn).getTimeSlotById(resultSet.getInt("time_slot_id")));
 				rendezVous.setSalle(new ImpSalleDAO(conn).getSalleById(resultSet.getInt("salle_id")));
 				rendezVous.setScheduler(new ImpSchedulerDAO(conn).getScheduler(resultSet.getInt("scheduler_id")));
+<<<<<<< HEAD
 				rendezVous.setDocteur(new ImpDocteurDAO(conn).getDocteurById(resultSet.getInt("docteur_id")));
+=======
+				rendezVous.setDocteur(new ImpDocteurDao(conn).getDocteurById(resultSet.getInt("docteur_id")));
+>>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
 				
 				rendezVousList.add(rendezVous);
 			}
