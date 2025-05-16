@@ -50,5 +50,13 @@ public class TimeSlot {
     public int getHoraire() {
 		return debut.getHour();
 	}
+
+    @Override
+    public String toString() {
+        String date = debut.toLocalDate().toString();
+        String heure = debut.toLocalTime() + " - " + fin.toLocalTime();
+        String statutStr = (statut != null) ? " (" + statut.toString() + ")" : "";
+        return date + " | " + heure + statutStr;
+    }
 }
 

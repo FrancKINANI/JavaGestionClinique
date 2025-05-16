@@ -61,7 +61,6 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 		} finally {
 			closeResources();
 		}
-		
 	}
 
 	@Override
@@ -76,7 +75,6 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 		} finally {
 			closeResources();
 		}
-		
 	}
 
 	@Override
@@ -104,7 +102,6 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 		} finally {
 			closeResources();
 		}
-		
 	}
 
 	@Override
@@ -189,9 +186,8 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 		}
 	}
 
-<<<<<<< HEAD
-    @Override
-    public Scheduler getSchedulerById(int id) {
+	@Override
+	public Scheduler getSchedulerById(int id) {
 		sql = "SELECT * FROM " + superTableName + " WHERE id = ?";
 		try {
 			preparedStatement = connection.prepareStatement(sql);
@@ -206,14 +202,11 @@ public class ImpSchedulerDAO implements SchedulerDAO {
 				scheduler.setTelephone(resultSet.getString("telephone"));
 				scheduler.setEmail(resultSet.getString("email"));
 				scheduler.setDateNaissance(resultSet.getObject("date_naissance", LocalDateTime.class));
-                                return scheduler;
+				return scheduler;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-                return null;
-    }
-
-=======
->>>>>>> 682628f10b4231d1259ea5f51b647b5f995d5cc3
+		return null;
+	}
 }

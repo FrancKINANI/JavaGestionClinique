@@ -17,25 +17,74 @@ public class PrendreRendezVousFrame extends JFrame {
     public PrendreRendezVousFrame(Patient patient) {
         setTitle("Prendre un rendez-vous");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 400);
+        setSize(520, 420);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(5, 2, 10, 10));
+        getContentPane().setBackground(new Color(0xF5F5F5));
+        setLayout(new GridBagLayout());
 
-        add(new JLabel("Médecin : "));
+        // Panel central style carte
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(0x4CAF50), 2, true),
+            BorderFactory.createEmptyBorder(25, 30, 25, 30)
+        ));
+        panel.setLayout(new GridBagLayout());
+
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 16);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 15);
+
+        JLabel medecinLabel = new JLabel("Médecin :");
+        medecinLabel.setFont(labelFont);
         JComboBox<Docteur> medecinBox = new JComboBox<>();
-        add(medecinBox);
+        medecinBox.setFont(fieldFont);
+        medecinBox.setPreferredSize(new Dimension(220, 28));
 
-        add(new JLabel("Créneau : "));
+        JLabel creneauLabel = new JLabel("Créneau :");
+        creneauLabel.setFont(labelFont);
         JComboBox<TimeSlot> creneauBox = new JComboBox<>();
-        add(creneauBox);
+        creneauBox.setFont(fieldFont);
+        creneauBox.setPreferredSize(new Dimension(220, 28));
 
-        add(new JLabel("Commentaire : "));
+        JLabel commentaireLabel = new JLabel("Commentaire :");
+        commentaireLabel.setFont(labelFont);
         JTextField commentaireField = new JTextField();
-        add(commentaireField);
+        commentaireField.setFont(fieldFont);
+        commentaireField.setPreferredSize(new Dimension(220, 28));
+        commentaireField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(0xCCCCCC), 1, true),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
 
-        add(new JLabel(""));
         JButton validerBtn = new JButton("Valider");
-        add(validerBtn);
+        validerBtn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        validerBtn.setBackground(new Color(0x4CAF50));
+        validerBtn.setForeground(Color.WHITE);
+        validerBtn.setFocusPainted(false);
+        validerBtn.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        validerBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(12, 10, 12, 10);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.LINE_END;
+        panel.add(medecinLabel, gbc);
+        gbc.gridx = 1; gbc.anchor = GridBagConstraints.LINE_START;
+        panel.add(medecinBox, gbc);
+
+        gbc.gridx = 0; gbc.gridy++; gbc.anchor = GridBagConstraints.LINE_END;
+        panel.add(creneauLabel, gbc);
+        gbc.gridx = 1; gbc.anchor = GridBagConstraints.LINE_START;
+        panel.add(creneauBox, gbc);
+
+        gbc.gridx = 0; gbc.gridy++; gbc.anchor = GridBagConstraints.LINE_END;
+        panel.add(commentaireLabel, gbc);
+        gbc.gridx = 1; gbc.anchor = GridBagConstraints.LINE_START;
+        panel.add(commentaireField, gbc);
+
+        gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(validerBtn, gbc);
+
+        add(panel, new GridBagConstraints());
 
         // Chargement des médecins et créneaux
         try {

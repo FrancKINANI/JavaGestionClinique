@@ -31,4 +31,9 @@ public class Docteur extends Utilisateur {
 	public void setRendezVousList(List<RendezVous> rendezVousList) {
 		this.rendezVousList = rendezVousList;
 	}
+
+	@Override
+	public String toString() {
+		return getNom() + " " + getPrenom();
+	}
 }
