@@ -6,7 +6,7 @@ import models.Patient;
 
 public class PatientFrame extends JFrame {
     public PatientFrame(Patient patient) {
-        setTitle("Espace Patient - Clinique Al Andalous");
+        setTitle("Espace Patient " + patient.getNom() + " - Clinique Al Andalous");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
         setLocationRelativeTo(null);

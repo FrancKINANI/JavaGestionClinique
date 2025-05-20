@@ -88,7 +88,6 @@ public class ImpUtilisateurDAO implements UtilisateurDAO {
 							admin.setTelephone(resultSet.getString("telephone"));
 							admin.setEmail(resultSet.getString("email"));
 							admin.setPassword(resultSet.getString("mot_de_passe"));
-							admin.setRole(new Role(id, EnumROLE.fromString(roleStr)));
 							return admin;
 						default:
 							return null;

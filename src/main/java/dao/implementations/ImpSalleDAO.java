@@ -135,4 +135,23 @@ public class ImpSalleDAO implements SalleDAO {
 		}
 		return null;
 	}
+
+	public Salle getSalleDisponiblePourCreneau(Connection conn, int timeSlotId) {
+		String sql = "SELECT * FROM salles WHERE id NOT IN (SELECT salle_id FROM rendez_vous WHERE timeSlot_id = ?) LIMIT 1";
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, timeSlotId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				Salle salle = new Salle();
+				salle.setId(rs.getInt("id"));
+				salle.setNumero(rs.getInt("numero"));
+				salle.setEtage(rs.getInt("etage"));
+				salle.setCapacite(rs.getInt("capacite"));
+				return salle;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

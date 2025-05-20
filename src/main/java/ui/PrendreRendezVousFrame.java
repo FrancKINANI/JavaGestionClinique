@@ -12,6 +12,8 @@ import models.RendezVous;
 import models.Patient;
 import java.sql.Connection;
 import java.util.List;
+import models.StatutTimeSlot;
+import models.Salle;
 
 public class PrendreRendezVousFrame extends JFrame {
     public PrendreRendezVousFrame(Patient patient) {
@@ -91,8 +93,10 @@ public class PrendreRendezVousFrame extends JFrame {
             Connection conn = DatabaseConfig.getConnection();
             List<Docteur> medecins = new ImpDocteurDAO(conn).getAllDocteurs();
             for (Docteur d : medecins) medecinBox.addItem(d);
-            List<TimeSlot> creneaux = new ImpTimeSlotDAO(conn).getAllTimeSlots();
-            for (TimeSlot t : creneaux) if ("DISPONIBLE".equalsIgnoreCase(t.getStatut().toString())) creneauBox.addItem(t);
+            List<TimeSlot> creneaux = new ImpTimeSlotDAO(conn).getAvailableTimeSlots();
+            for (TimeSlot t : creneaux) {
+                creneauBox.addItem(t);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erreur chargement médecins/créneaux : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
@@ -114,6 +118,15 @@ public class PrendreRendezVousFrame extends JFrame {
                 rdv.setCommentaire(commentaire);
                 rdv.setStatut("PLANIFIE");
                 rdv.setDuree(30); // valeur par défaut
+
+                // Affecter une salle disponible automatiquement
+                Salle salle = new dao.implementations.ImpSalleDAO(conn).getSalleDisponiblePourCreneau(conn, creneau.getId());
+                if (salle == null) {
+                    JOptionPane.showMessageDialog(this, "Aucune salle disponible pour ce créneau.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                rdv.setSalle(salle);
+
                 new ImpRendezVousDAO(conn).addRendezVous(rdv);
                 JOptionPane.showMessageDialog(this, "Rendez-vous pris avec succès !", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();

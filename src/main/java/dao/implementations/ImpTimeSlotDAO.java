@@ -101,11 +101,11 @@ public class ImpTimeSlotDAO implements TimeSlotDAO {
 	@Override
 	public List<TimeSlot> getAllTimeSlots() {
 		sql = "SELECT * FROM time_slots";
+		List<TimeSlot> timeSlots = new ArrayList<>();
 		try {
 			preparedStatement = conn.prepareStatement(sql);
 			resultSet = preparedStatement.executeQuery();
 
-			List<TimeSlot> timeSlots = new ArrayList<>();
 			while (resultSet.next()) {
 				TimeSlot timeSlot = new TimeSlot();
 				timeSlot.setId(resultSet.getInt("id"));
@@ -115,13 +115,63 @@ public class ImpTimeSlotDAO implements TimeSlotDAO {
 
 				timeSlots.add(timeSlot);
 			}
-			return timeSlots;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeResources();
 		}
-		return null;
+		return timeSlots;
+	}
+
+	@Override
+	public List<TimeSlot> getAvailableTimeSlots() {
+		sql = "SELECT * FROM time_slots WHERE statut = 'DISPONIBLE'";
+		List<TimeSlot> timeSlots = new ArrayList<>();
+		try {
+			preparedStatement = conn.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				TimeSlot timeSlot = new TimeSlot();
+				timeSlot.setId(resultSet.getInt("id"));
+				timeSlot.setDebut(resultSet.getObject("debut", LocalDateTime.class));
+				timeSlot.setFin(resultSet.getObject("fin", LocalDateTime.class));
+				timeSlot.setStatut(resultSet.getString("statut"));
+
+				timeSlots.add(timeSlot);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		return timeSlots;
+	}
+
+	@Override
+	public List<TimeSlot> getAvailableTimeSlotsForDate(LocalDateTime date) {
+		sql = "SELECT * FROM time_slots WHERE statut = 'DISPONIBLE' AND DATE(debut) = DATE(?)";
+		List<TimeSlot> timeSlots = new ArrayList<>();
+		try {
+			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setObject(1, date);
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				TimeSlot timeSlot = new TimeSlot();
+				timeSlot.setId(resultSet.getInt("id"));
+				timeSlot.setDebut(resultSet.getObject("debut", LocalDateTime.class));
+				timeSlot.setFin(resultSet.getObject("fin", LocalDateTime.class));
+				timeSlot.setStatut(resultSet.getString("statut"));
+
+				timeSlots.add(timeSlot);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		return timeSlots;
 	}
 	
 	private void closeResources() {
